@@ -226,7 +226,71 @@ const config: NuxtConfig = {
    * https://pwa.nuxtjs.org/workbox
    */
   pwa: {
-    workbox: false,
+    workbox: {
+      /* workbox options */
+      dev: true /* serviceworker dev check */,
+      offlineAnalytics: true,
+      offlineStrategy: 'StaleWhileRevalidate',
+      importScripts: [
+          'sw-custom.js'
+      ],
+      runtimeCaching: [
+        {
+          urlPattern: '.*.(png|gif|jpg|jpeg|svg|ico|webp|JPG|PNG|JPEG)',
+          handler: 'networkFirst',
+          strategyOptions: {
+            cacheName: 'images',
+            cacheExpiration: {
+              maxAgeSeconds: 60 * 60 * 24 * 2 //2days
+            },
+            cacheableResponse: {
+              statuses: [200]
+            }
+          }
+        },
+        {
+          urlPattern: '.*.(js|css)',
+          handler: 'networkFirst',
+          strategyOptions: {
+            cacheName: 'scripts',
+            cacheExpiration: {
+              maxAgeSeconds: 72 * 60 * 60 * 2 //2days
+            },
+            cacheableResponse: {
+              statuses: [200]
+            }
+          }
+        },
+        {
+          urlPattern: '.*.(woff2)',
+          handler: 'networkFirst',
+          strategyOptions: {
+            cacheName: 'fonts',
+            cacheExpiration: {
+              maxAgeSeconds: 72 * 60 * 60 * 30 //30days
+            },
+            cacheableResponse: {
+              statuses: [200]
+            }
+          }
+        },
+        {
+          urlPattern:
+            '(/*.)',
+          strategyOptions: {
+            cacheName: 'others',
+            handler: 'networkFirst',
+            cacheExpiration: {
+              maxAgeSeconds: 60 * 60 * 24 * 1, // 01days
+            },
+            cacheableResponse: {
+              statuses: [200],
+            }
+          }
+        }
+      ]//*/
+    }
+
   },
   // /*
   // ** hot read configuration for docker
